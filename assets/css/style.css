@@ -1,0 +1,318 @@
+/**
+ * Chat Application Styles
+ * Structure:
+ * 1. Variables & Reset
+ * 2. Layout Containers
+ * 3. User List (Sidebar)
+ * 4. Chat Area (Main)
+ * 5. Messages (Bubbles)
+ * 6. Input Area
+ * 7. Scrollbars
+ * 8. Utilities & Animations
+ * 9. Responsive Design
+ */
+
+/* 1. Variables & Global Reset */
+:root {
+  --primary-color: #0d6efd;
+  --bg-color: #f0f2f5;
+  --white: #ffffff;
+  --text-dark: #212529;
+  --text-muted: #6c757d;
+  --border-color: #dee2e6;
+  --hover-bg: #f8f9fa;
+  --active-bg: #e7f3ff;
+  --header-height: 56px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-color);
+  overflow: hidden; /* Prevents double scrollbars */
+}
+
+/* 2. Layout Containers */
+.chat-container {
+  height: calc(100vh - var(--header-height));
+  overflow: hidden;
+}
+
+/* 3. User List (Sidebar) */
+.users-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.users-list {
+  height: calc(100vh - var(--header-height) - 60px); /* Adjust based on header size */
+  overflow-y: auto;
+  background-color: var(--white);
+}
+
+.user-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.user-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.user-item.active {
+  background-color: var(--active-bg);
+  border-left: 3px solid var(--primary-color);
+}
+
+.user-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-weight: bold;
+  font-size: 18px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-status {
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.status-indicator.online {
+  background-color: #28a745;
+}
+
+.status-indicator.offline {
+  background-color: var(--text-muted);
+}
+
+/* 4. Chat Area (Main) */
+.chat-area {
+  height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white);
+}
+
+.no-chat-selected {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--hover-bg);
+  color: var(--text-muted);
+}
+
+.chat-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: var(--white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 15px; /* Added padding for better spacing */
+}
+
+.messages-container {
+  flex-grow: 1; /* Ensures it takes up remaining space */
+  overflow-y: auto;
+  background-color: var(--hover-bg);
+  /* Subtle Pattern Background */
+  background-image:
+    linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+    linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+    linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  padding: 20px;
+}
+
+/* 5. Message Bubbles */
+.message-wrapper {
+  display: flex;
+  margin-bottom: 15px;
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+.message-wrapper.sent {
+  justify-content: flex-end;
+}
+
+.message-wrapper.received {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.message-bubble.sent {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border-bottom-right-radius: 4px;
+}
+
+.message-bubble.received {
+  background-color: var(--white);
+  color: var(--text-dark);
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.message-text {
+  margin-bottom: 5px;
+  line-height: 1.4;
+}
+
+.message-time {
+  font-size: 11px;
+  opacity: 0.7;
+  text-align: right;
+  display: block;
+}
+
+.message-bubble.received .message-time {
+  color: var(--text-muted);
+}
+
+/* 6. Input Area */
+.message-input-container {
+  position: sticky;
+  bottom: 0;
+  background-color: var(--white);
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  z-index: 20;
+}
+
+#messageInput {
+  border-radius: 25px;
+  padding: 10px 20px;
+  border: 1px solid var(--border-color); /* Fixed typo here */
+  width: 100%;
+}
+
+#messageInput:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, .25);
+  outline: none;
+}
+
+#messageForm button {
+  border-radius: 25px;
+  padding: 10px 30px;
+}
+
+/* 7. Scrollbar Customization */
+.users-list::-webkit-scrollbar,
+.messages-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.users-list::-webkit-scrollbar-track,
+.messages-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.users-list::-webkit-scrollbar-thumb,
+.messages-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.users-list::-webkit-scrollbar-thumb:hover,
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 8. Utilities & Animations */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.no-messages {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 9. Responsive Design */
+@media (max-width: 768px) {
+  /* Hide sidebar by default on mobile */
+  .chat-container .col-md-4 {
+    display: none;
+  }
+
+  /* Show sidebar when active class is toggled via JS */
+  .chat-container .col-md-4.show-mobile {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 56px;
+    width: 100%;
+    height: calc(100vh - 56px);
+    z-index: 1000;
+    background: var(--white);
+  }
+
+  .message-bubble {
+    max-width: 85%;
+  }
+}
